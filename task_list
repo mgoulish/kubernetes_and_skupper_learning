@@ -14,7 +14,7 @@ Kubernetes
 
       DONE  Templating (kustomize, yq, helm) 
 
-      Services and Networking 
+      DONE  Services and Networking 
 
       Ingress and gateways 
     }
