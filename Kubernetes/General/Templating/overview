@@ -1,0 +1,36 @@
+As your Kubernetes configurations grow, manually editing large 
+YAML files becomes error-prone and hard to maintain across 
+environments (dev, staging, prod).
+
+Templating tools help you manage Kubernetes manifests more 
+effectively by reducing duplication and enabling 
+environment-specific customization.
+
+Here are the three main tools you’ll encounter:
+
+
+Tool	     Style	      Best For	                   Built into kubectl?	Learning Curve
+-----------------------------------------------------------------------------------------------
+
+kustomize    Declarative      Environment-specific         Yes                  Low–Medium
+             overlays         configs, GitOps              (kubectl apply -k)
+
+helm         Go templates     Packaging, versioning,       No                   Medium
+             + charts         complex apps
+
+yq           YAML processor   Quick edits, CI/CD           No                   Low
+             (like jq)        pipelines, transformations
+
+
+
+    *  kustomize is ideal when you want to keep everything as 
+       plain YAML and layer changes on top (bases + overlays).
+
+    *  helm is better when you need a full packaging solution 
+       with values files, dependencies, and release management.
+
+    *  yq is a lightweight Swiss Army knife for inspecting and 
+       modifying YAML files programmatically.
+
+Most teams use a combination of these tools depending on the situation.
+

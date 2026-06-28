@@ -1,0 +1,142 @@
+
+Exercise 1: Create a simple kustomize base and overlay
+----------------------------------------------------------
+
+Create a base Deployment and then use an overlay to change the replica count and image for a “dev” environment.
+
+
+mkdir -p kustomize-demo/base kustomize-demo/overlays/dev
+
+# Create the base
+cat > kustomize-demo/base/deployment.yaml <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+EOF
+
+cat > kustomize-demo/base/kustomization.yaml <<EOF
+resources:
+- deployment.yaml
+EOF
+
+# Create a dev overlay
+cat > kustomize-demo/overlays/dev/kustomization.yaml <<EOF
+resources:
+- ../../base
+patches:
+- patch.yaml
+EOF
+
+cat > kustomize-demo/overlays/dev/patch.yaml <<EOF
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 2
+  template:
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:1.27-alpine
+EOF
+
+# Apply the dev overlay
+kubectl apply -k kustomize-demo/overlays/dev
+
+# Verify
+kubectl get deployment web
+kubectl get pods -l app=web
+
+
+
+
+Exercise 2: Use kubectl kustomize to preview output without applying
+-------------------------------------------------------------------------
+
+# See the final rendered YAML before applying
+kubectl kustomize kustomize-demo/overlays/dev
+
+# You can also pipe it to other tools
+kubectl kustomize kustomize-demo/overlays/dev | kubectl diff -f -
+
+
+
+
+Exercise 3: Basic Helm usage – install, upgrade, and inspect
+-------------------------------------------------------------------------
+
+Install a simple chart from the stable repository (or use a local chart).
+
+# Add a common repo (example)
+helm repo add bitnami https://charts.bitnami.com/bitnami
+helm repo update
+
+# Install nginx chart into a new namespace
+helm install my-nginx bitnami/nginx \
+  --namespace helm-demo \
+  --create-namespace \
+  --set replicaCount=2 \
+  --set image.tag=1.27.0
+
+# Check what was created
+helm list -n helm-demo
+kubectl get all -n helm-demo -l app.kubernetes.io/name=nginx
+
+# Upgrade with new values
+helm upgrade my-nginx bitnami/nginx \
+  --namespace helm-demo \
+  --set replicaCount=3
+
+# View the rendered templates
+helm get manifest my-nginx -n helm-demo | head -100
+
+# Clean up
+helm uninstall my-nginx -n helm-demo
+kubectl delete ns helm-demo
+
+
+
+
+Exercise 4: Use yq to inspect and modify YAML
+-------------------------------------------------
+
+# Install yq if you don't have it (Ubuntu example)
+# sudo snap install yq
+
+# Inspect a Kubernetes manifest
+yq '.spec.replicas' kustomize-demo/base/deployment.yaml
+
+# Change a value in place
+yq -i '.spec.replicas = 5' kustomize-demo/base/deployment.yaml
+
+# Add a label
+yq -i '.metadata.labels.env = "dev"' kustomize-demo/base/deployment.yaml
+
+# View the result
+yq '.' kustomize-demo/base/deployment.yaml
+
+
+
+
+Exercise 5: Clean up
+-------------------------------------------------
+
+rm -rf kustomize-demo
+kubectl delete deployment web --ignore-not-found
+
+

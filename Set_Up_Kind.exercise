@@ -1,0 +1,8 @@
+Kubernetes/General/Set_Up_Kind
+======================================================
+
+
+# Create a dedicated learning cluster (single node is fine to start)
+kind create cluster --name k8s-learning
+
+

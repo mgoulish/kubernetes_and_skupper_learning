@@ -1,0 +1,64 @@
+
+Kubernetes/General/Kubectl/Workload_management 
+======================================================
+
+# Imperative Pod Creation
+# -------------------------------------
+
+# Run a pod
+kubectl run nginx-test --image=nginx:alpine --restart=Never
+
+# See it
+kubectl get pods
+kubectl get all
+
+# See it in detail
+kubectl describe pod nginx-test
+
+# Delete it
+kubectl delete pod nginx-test
+
+
+# Declarative Pod Creation
+# -------------------------------------
+
+# Save this as 'deployment.yaml'
+{
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+}
+
+# Apply the YAML description
+kubectl apply -f deployment.yaml
+
+# Show the deployment
+kubectl get deployments
+kubectl get pods --show-labels       # See what the labels are
+kubectl get pods -l app=web          # Show pods with a label selector
+
+# Delete the deployment
+kubectl delete deployment web
+
+
+
+
+

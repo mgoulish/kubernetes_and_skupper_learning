@@ -1,0 +1,40 @@
+
+The Kubernetes scheduler decides which node a Pod should run on. 
+Its most important job is to respect resource requests and limits.
+
+  * requests: The amount of CPU/memory a Pod thinks it will need. 
+              The scheduler uses this to find a node that has enough 
+              available resources.
+
+  * limits: The maximum amount of CPU/memory a Pod is allowed to use. 
+            The kubelet enforces these limits (using cgroups).
+
+
+These two values determine the Quality of Service (QoS) class of a Pod:
+
+
+
+
+QoS Class    Condition                Behavior under                           Priority
+                                      resource pressure         
+-----------------------------------------------------------------------------------------
+
+Guaranteed   requests == limits for   Last to be evicted                       Highest
+             both CPU and memory
+
+
+Burstable    requests < limits        Evicted before Guaranteed                Medium
+             (or only one is set)
+
+
+BestEffort   No requests or           First to be evicted                      Lowest
+             limits set
+
+
+
+Understanding this is critical for:
+
+    * Predictable scheduling
+    * Avoiding noisy neighbor problems
+    * Controlling eviction behavior during node pressure
+

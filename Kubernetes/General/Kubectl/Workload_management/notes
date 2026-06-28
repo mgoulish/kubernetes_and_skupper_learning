@@ -1,0 +1,182 @@
+**Perfect.** We'll go through **Kubernetes > General** strictly step by step, one sub-topic at a time.  
+
+Kind is an excellent choice for this — it gives you a real Kubernetes API (same `kubectl`, same resources, same behavior) in a lightweight, fast-to-create/tear-down environment on your Ubuntu machine. The main differences from "real" clusters are around networking, persistent storage, and multi-node realism, but for learning workload management, logging, scheduling, services, etc., it is more than good enough.
+
+---
+
+### Step 1: Kubectl – Workload Management
+
+This is the foundation. Almost everything else (services, ingress, CRDs, controllers, Skupper resources) builds on these same `kubectl` patterns.
+
+#### Core Concepts to Internalize
+- **Imperative** vs **Declarative**:
+  - Imperative: `kubectl run`, `kubectl create`, `kubectl scale`, `kubectl expose` (quick for exploration)
+  - Declarative: `kubectl apply -f file.yaml` (the production/GitOps way — what Skupper v2 uses heavily)
+- Every Kubernetes object has:
+  - `metadata` (name, namespace, labels, annotations)
+  - `spec` (desired state)
+  - `status` (observed state — usually read-only)
+- Namespaces are your friend for isolation while learning.
+- `kubectl` is your primary interface to the API server.
+
+#### Recommended Local Setup (do this once)
+
+Run these on your Ubuntu machine:
+
+```bash
+# Create a dedicated learning cluster (single node is fine to start)
+kind create cluster --name k8s-learning
+
+# Create a namespace we'll use for exercises
+kubectl create namespace k8s-learning
+kubectl config set-context --current --namespace=k8s-learning
+
+# Verify everything is working
+kubectl get nodes
+kubectl get ns
+```
+
+You can delete the cluster later with `kind delete cluster --name k8s-learning`.
+
+#### Key Workload Management Commands & Patterns
+
+**1. Quick exploration (imperative)**
+
+```bash
+# Run a temporary pod (great for testing images/commands)
+kubectl run nginx-test --image=nginx:alpine --restart=Never
+
+# See what was created
+kubectl get pods
+kubectl get all
+
+# Get details
+kubectl describe pod nginx-test
+
+# Clean up
+kubectl delete pod nginx-test
+```
+
+**2. Declarative style (the important one)**
+
+Create a file `deployment.yaml`:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+        ports:
+        - containerPort: 80
+```
+
+Then:
+
+```bash
+kubectl apply -f web.yaml
+kubectl get deployments
+kubectl get pods -l app=web          # label selector
+kubectl get pods --show-labels
+```
+
+**Useful management commands**
+
+```bash
+# Scale
+kubectl scale deployment web --replicas=4
+
+# Update image (triggers rolling update)
+kubectl set image deployment/web nginx=nginx:1.25-alpine
+
+# Watch the rollout
+kubectl rollout status deployment/web
+kubectl rollout history deployment/web
+
+# Undo
+kubectl rollout undo deployment/web
+
+# Edit live (opens your $EDITOR)
+kubectl edit deployment web
+
+# Delete
+kubectl delete deployment web
+```
+
+**3. Other common workload types you'll use**
+
+- `Pod` (rarely create directly in production)
+- `Deployment` (most common)
+- `StatefulSet` (ordered, stable identity — useful later for databases)
+- `DaemonSet` (one per node)
+- `Job` / `CronJob`
+
+Try creating a simple Job:
+
+```yaml
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: hello-job
+spec:
+  template:
+    spec:
+      containers:
+      - name: hello
+        image: busybox
+        command: ["echo", "Hello from Kubernetes!"]
+      restartPolicy: Never
+  backoffLimit: 1
+```
+
+Apply it and watch:
+
+```bash
+kubectl apply -f job.yaml
+kubectl get jobs
+kubectl get pods
+kubectl logs <pod-name>
+```
+
+#### Exercises for You (do these now)
+
+1. Create the `web` Deployment above with 3 replicas.
+2. Scale it to 5 replicas using `kubectl scale`.
+3. Change the image to `nginx:1.27-alpine` and watch the rolling update.
+4. Add a label `env: learning` to the Deployment and verify the pods get the label.
+5. Use `kubectl get all` and `kubectl get pods -o wide` to see node assignment.
+6. Clean everything up in the namespace with:
+   ```bash
+   kubectl delete all --all
+   ```
+
+#### Quick Reference / Gotchas
+- Always prefer `kubectl apply -f` over imperative commands for anything you might want to version control.
+- Use `-o yaml` or `-o json` to see full object output (great for learning).
+- `kubectl explain deployment.spec` is incredibly useful.
+- Labels are for *selection*. Annotations are for *metadata* (not used for selection).
+- Dry-run is your friend: `kubectl apply -f file.yaml --dry-run=client -o yaml`
+
+---
+
+**When you're ready**, reply with something like:
+
+- "Done with the exercises" (or tell me what you observed / got stuck on)
+- Or ask any specific questions about workload management
+- Then we'll move to the next item: **Accessing logs, exec into pod**
+
+We can stay on this topic as long as you want — no rush. How does this pace feel? Ready to try the exercises, or want me to expand on any part first (e.g., more on labels/selectors, rollout strategies, or `kubectl explain` usage)?
