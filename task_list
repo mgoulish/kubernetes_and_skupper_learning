@@ -1,0 +1,116 @@
+Kubernetes 
+{
+
+    General
+    {
+      Kubectl  
+      {
+        DONE   Workload management 
+
+        DONE   Accessing logs, exec into pod 
+      }
+
+      DONE  Scheduler (req/limits, PoD QoS) 
+
+      DONE  Templating (kustomize, yq, helm) 
+
+      Services and Networking 
+
+      Ingress and gateways 
+    }
+
+
+
+  Programming in Kubernetes 
+  {
+      Understand the API server 
+
+      Client-Go 
+      {
+        K8s objects in Go 
+
+        Client sets 
+
+        Informers and Caching 
+
+        Dynamic and type clients 
+      }
+  }
+
+
+  Understand the Model 
+  {
+    CRDs 
+    {
+      Kubernetes Custom Resource Definitions 
+
+      Review each resource and attributes 
+      {
+        Understand their purpose and how they are used 
+      }
+    }
+  }
+}
+
+
+Skupper 
+{
+  concepts
+  {
+    https://skupper.io/docs/refdog/concepts/index.html 
+  }
+
+  resources
+  {
+    /config/crd/bases 
+  }
+
+  the Controller 
+  {
+    Theory of operation 
+    {
+      K8S 
+
+      System sites 
+    }
+  }
+
+  Declarative operation 
+  {
+    Deploying the controller and CRDs 
+    {
+      Cluster, namespace scope 
+    }
+
+    Mega yamls 
+
+    Helm chart 
+
+    Operator 
+  }
+
+  The CLI 
+  {
+    How it layers on top of CRDs 
+
+    The “generate” option 
+  }
+
+  The Adaptor 
+  {
+    CR to router configuration (links, listeners, connectors, etc.) 
+
+    Understanding status derivation (see vanflow below) 
+  }
+
+  Vanflow 
+
+  The Collector 
+  {
+    Network observer 
+
+    Mini-collector (for status) 
+  }
+
+  the Console 
+}
