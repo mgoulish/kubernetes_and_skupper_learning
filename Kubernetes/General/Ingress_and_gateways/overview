@@ -1,0 +1,28 @@
+While Services provide stable internal networking 
+(ClusterIP, NodePort, LoadBalancer), they are mostly 
+Layer 4 (TCP/UDP). They lack the rich HTTP-level 
+features needed for real-world applications, such as:
+
+  *Routing traffic based on hostname 
+   (example.com vs api.example.com)
+
+  * Routing based on URL path (/api vs /web)
+
+  * TLS termination and certificate management
+
+  * Multiple services behind a single external IP
+
+Ingress is a Kubernetes resource that allows you to 
+define these HTTP/HTTPS routing rules. However, 
+Ingress is only a specification — you also need an 
+Ingress Controller (such as ingress-nginx, Traefik, 
+or HAProxy) to actually implement the routing.
+
+Gateway API is the newer, more powerful, and better-
+designed successor to the original Ingress resource. 
+It offers stronger typing, better role separation, 
+and more advanced traffic management features. 
+Many teams are now migrating from Ingress to Gateway API.
+
+
+

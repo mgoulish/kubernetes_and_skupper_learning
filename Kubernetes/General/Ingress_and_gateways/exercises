@@ -1,0 +1,149 @@
+
+Exercise 1: Install the ingress-nginx controller on 
+            a Kind cluster
+------------------------------------------------------
+
+Kind has excellent built-in support for ingress-nginx
+
+# Install ingress-nginx using the official Kind quickstart
+kubectl apply -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+# Wait for the controller to be ready
+kubectl wait --namespace ingress-nginx \
+  --for=condition=ready pod \
+  --selector=app.kubernetes.io/component=controller \
+  --timeout=90s
+
+
+
+
+Exercise 2: Deploy a simple web application and expose 
+            it with an Ingress
+-----------------------------------------------------------
+
+cat <<EOF | kubectl apply -f -
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:
+        app: web
+    spec:
+      containers:
+      - name: nginx
+        image: nginx:alpine
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: web
+spec:
+  selector:
+    app: web
+  ports:
+  - port: 80
+    targetPort: 80
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: web-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: web.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+EOF
+
+
+
+
+Exercise 3: Access the Ingress from your host machine
+--------------------------------------------------------
+
+# Add an entry to /etc/hosts (requires sudo)
+echo "127.0.0.1 web.local" | sudo tee -a /etc/hosts
+
+# Test access
+curl http://web.local
+
+# You can also use the Kind control plane IP
+kubectl get svc -n ingress-nginx ingress-nginx-controller
+
+
+
+
+Exercise 4: Add path-based routing (multiple paths to 
+            different services)
+----------------------------------------------------------
+
+# Deploy a second application
+kubectl create deployment api --image=hashicorp/http-echo --port=5678 -- \
+  -text="API response"
+
+kubectl expose deployment api --port=80 --target-port=5678
+
+# Create an Ingress with two paths
+cat <<EOF | kubectl apply -f -
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: multi-path-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  ingressClassName: nginx
+  rules:
+  - host: web.local
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: web
+            port:
+              number: 80
+      - path: /api
+        pathType: Prefix
+        backend:
+          service:
+            name: api
+            port:
+              number: 80
+EOF
+
+# Test both paths
+curl http://web.local/
+curl http://web.local/api
+
+
+
+Exercise 5: Clean up
+----------------------------------------------
+
+kubectl delete ingress web-ingress multi-path-ingress
+kubectl delete svc web api
+kubectl delete deployment web api
+
+# Optional: remove the ingress controller
+kubectl delete -f https://raw.githubusercontent.com/kubernetes/ingress-nginx/main/deploy/static/provider/kind/deploy.yaml
+
+
