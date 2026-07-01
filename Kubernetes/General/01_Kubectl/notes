@@ -1,0 +1,23 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: web
+  labels:
+    app: web
+spec:
+  replicas: 2                 <--- this is just a single value. No hyphens or key:values.
+  selector:
+    matchLabels:
+      app: web
+  template:
+    metadata:
+      labels:                 <--- this is a map, so its entries are "key: value"
+        app: web
+    spec:
+      containers:             <--- this is a list, so each container will have a hyphen
+      - name: nginx
+        image: nginx:alpine
+        ports:                <--- this is also a list
+        - containerPort: 80
+                              <--- if there were another container, it would start here
+                                   with a hyphen

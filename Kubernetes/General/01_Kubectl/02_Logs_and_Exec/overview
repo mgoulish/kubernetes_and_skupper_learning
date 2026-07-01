@@ -1,0 +1,17 @@
+
+
+Being able to easily see what’s happening inside your 
+containers is essential for debugging (and will be very 
+useful later when we look at Skupper routers, collectors, etc.).
+
+Why this matters:
+
+    * kubectl logs lets you see stdout/stderr from containers.
+
+    * kubectl exec lets you run commands inside a running container 
+      (like bash, ps, curl, etc.).
+
+
+Together they give you the two most common ways to inspect live 
+workloads without needing to SSH into nodes.
+

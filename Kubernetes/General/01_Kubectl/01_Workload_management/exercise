@@ -2,11 +2,18 @@
 Kubernetes/General/Kubectl/Workload_management 
 ======================================================
 
-# Imperative Pod Creation
+# Exercise 1: Imperative Pod Creation
 # -------------------------------------
 
 # Run a pod
 kubectl run nginx-test --image=nginx:alpine --restart=Never
+# If it doesn't work, you may need to create the Kind cluster:
+#    kind create cluster --name k8s-learning
+# Or maybe, just start it:
+#    kind start --name k8s-learning
+# Or even delete it and then recreate:
+#    kind delete cluster --name k8s-learning
+
 
 # See it
 kubectl get pods
@@ -19,7 +26,7 @@ kubectl describe pod nginx-test
 kubectl delete pod nginx-test
 
 
-# Declarative Pod Creation
+# Exercise 2: Declarative Pod Creation
 # -------------------------------------
 
 # Save this as 'deployment.yaml'
@@ -53,6 +60,8 @@ kubectl apply -f deployment.yaml
 # Show the deployment
 kubectl get deployments
 kubectl get pods --show-labels       # See what the labels are
+                                     # This is how you can tell that two pods are 
+                                     # replicas of the same workload.
 kubectl get pods -l app=web          # Show pods with a label selector
 
 # Delete the deployment

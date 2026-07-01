@@ -1,0 +1,28 @@
+
+This is the foundation. Almost everything else (services, 
+ingress, CRDs, controllers, Skupper resources) builds on 
+these same kubectl patterns.
+
+
+Core Concepts to Internalize:
+
+  * Imperative vs Declarative:
+
+      Imperative: kubectl run, kubectl create, kubectl scale, 
+                  kubectl expose (quick for exploration)
+
+      Declarative: kubectl apply -f file.yaml 
+                   (the production/GitOps way — what Skupper v2 uses heavily)
+
+  * Every Kubernetes object has:
+
+        - metadata (name, namespace, labels, annotations)
+
+        - spec (desired state)
+
+        - status (observed state — usually read-only)
+
+  * Namespaces are your friend for isolation while learning.
+
+  * kubectl is your primary interface to the API server.
+
