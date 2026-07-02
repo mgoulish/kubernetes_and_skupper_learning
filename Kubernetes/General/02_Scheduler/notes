@@ -1,0 +1,28 @@
+
+QoS Classes, and How They Get That Way
+=================================================
+
+1. If you specify the same request and limit for
+   both CPU and Memory, you get Guaranteed Service.
+
+   That's because you are most predictable. You 
+   know exactly what you need to run. and you know 
+   you will not need any more. 
+
+   Schedulers *like* predictability.
+
+
+2. If you know the minimum you need, but you might 
+   need more, then you get the next rung down.
+   We will give you what you need, and maybe we will
+   be able to "burst" you higher. And maybe not.
+
+
+3. If you walk in the door with no clue what you need
+   we will give you whatever scraps may be left over 
+   by the grownups.
+
+
+
+
+
