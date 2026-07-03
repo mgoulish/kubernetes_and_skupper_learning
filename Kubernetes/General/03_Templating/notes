@@ -1,0 +1,13 @@
+
+Kustomize overlays are useful because when you need to
+change a Deployment YAML for different environments -- 
+for example, Dev and Prod, the changes are usually small 
+compared to the entire YAML, which may be large.
+
+These Kustomize overlays allow you to have a common base
+and then make modifications for the different environments
+only with overlays. Much less error-prone.
+
+Also, everything is done with YAML. No need to learn a new
+templating language.
+
