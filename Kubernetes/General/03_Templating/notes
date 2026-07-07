@@ -1,4 +1,7 @@
 
+Kustomize
+-------------------------------------------------------------
+
 Kustomize overlays are useful because when you need to
 change a Deployment YAML for different environments -- 
 for example, Dev and Prod, the changes are usually small 
@@ -10,4 +13,151 @@ only with overlays. Much less error-prone.
 
 Also, everything is done with YAML. No need to learn a new
 templating language.
+
+
+
+Helm
+-------------------------------------------------------------
+
+Complex deployments may require many YAML files. Rather than
+deal with each one by hand, Helm Charts give you a higher level 
+of abstraction that lets you manage them all at once, so you 
+can deploy, upgrade, or roll back a complex deployment very 
+much like you might do with installed software.
+
+Here is the structure of a Helm chart:
+
+my-app/
+├── Chart.yaml              # Chart metadata (required)
+├── values.yaml             # Default configuration values (required)
+├── charts/                 # Sub-charts / dependencies (optional)
+├── templates/              # Kubernetes manifest templates (required)
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   ├── ingress.yaml
+│   ├── configmap.yaml
+│   ├── _helpers.tpl        # Common helper templates
+│   └── NOTES.txt           # Message shown after `helm install`
+└── README.md               # Documentation for users of the chart
+
+
+A simple real example:
+
+web-app/
+├── Chart.yaml
+├── values.yaml
+├── templates/
+│   ├── deployment.yaml
+│   ├── service.yaml
+│   └── NOTES.txt
+└── README.md
+
+
+Chart.yaml
+{
+  apiVersion: v2
+  name: web-app
+  description: A simple web application
+  type: application
+  version: 1.0.0          # Chart version
+  appVersion: "1.2.3"     # Version of the application itself
+}
+
+
+values.yaml
+{
+  replicaCount: 2
+
+  image:
+    repository: nginx
+    tag: "alpine"
+    pullPolicy: IfNotPresent
+
+  service:
+    type: ClusterIP
+    port: 80
+
+  resources:
+    limits:
+      cpu: 200m
+      memory: 256Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+}
+
+
+templates/deployment.yaml
+{
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: {{ .Release.Name }}-web
+  spec:
+    replicas: {{ .Values.replicaCount }}
+    selector:
+      matchLabels:
+        app: {{ .Release.Name }}
+    template:
+      metadata:
+        labels:
+          app: {{ .Release.Name }}
+      spec:
+        containers:
+        - name: web
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+          - containerPort: 80
+          resources:
+            {{- toYaml .Values.resources | nindent 10 }}
+}
+
+
+Now when someone uses this chart, they can override things:
+
+  helm install my-web ./web-app \
+    --set replicaCount=3 \
+    --set image.tag=1.25 \
+    --set resources.limits.memory=512Mi
+
+Or they can supply an entire override file:
+
+  helm install my-web ./web-app -f values-prod.yaml
+
+When Helm renders templates/deployment.yaml, it effectively does something 
+like this behind the scenes:
+
+// Helm creates this data structure
+dot := struct {
+    Release struct {
+        Name      string
+        Namespace string
+        Revision  int
+        // ...
+    }
+    Values  map[string]interface{}   // from values.yaml + overrides
+    Chart   map[string]interface{}   // from Chart.yaml
+    // ...
+}{
+    Release: { Name: "my-web-app", ... },
+    Values:  { replicaCount: 3, image: { tag: "alpine" }, ... },
+    Chart:   { Name: "web-app", Version: "1.0.0", ... },
+}
+
+Then it renders your template using this data.
+
+Expression                               Where the value comes from
+
+{{ .Release.Name }}                      The release name you gave in helm 
+                                         install / helm upgrade
+
+{{ .Values.xxx }}                        values.yaml + any overrides you pass 
+                                         on the command line
+
+{{ .Chart.Version }}                     The version: field in Chart.yaml
+
+{{ .Release.Namespace }}                 The namespace the release is being 
+                                         installed into
+
+
 
