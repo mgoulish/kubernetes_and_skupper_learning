@@ -124,8 +124,10 @@ Or they can supply an entire override file:
 
   helm install my-web ./web-app -f values-prod.yaml
 
-When Helm renders templates/deployment.yaml, it effectively does something 
-like this behind the scenes:
+
+---------------------------------------------------------------
+When Helm renders templates/deployment.yaml, 
+it basically does something like this behind the scenes:
 
 // Helm creates this data structure
 dot := struct {
@@ -160,4 +162,16 @@ Expression                               Where the value comes from
                                          installed into
 
 
+
+-----------------------------------------------------------
+
+So Helm can do conditionals, and loops, and includes ...
+
+It is sounding like a programming language...
+
+Gah! But you can't change the variables!
+They are immutable within their scope!
+So they are constants.
+
+But you can make new variables based on them, plus some delta.
 

@@ -26,3 +26,8 @@ QoS Classes, and How They Get That Way
 
 
 
+How to Get Kicked Off
+===========================================================
+
+1. It is not the Scheduler, but the Kubelet that does the kicking.
+   The Kubelet is the 
