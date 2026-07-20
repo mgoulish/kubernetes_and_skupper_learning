@@ -1,0 +1,56 @@
+Why this matters
+---------------------
+
+  Everything in Kubernetes — kubectl, the scheduler, controllers, 
+  CRDs, your own Go programs — is ultimately just talking to the 
+  API server over HTTP/REST (with protobuf or JSON). 
+
+  Understanding its structure, versioning, discovery, and watch-
+  semantics makes everything else click. 
+
+  It also explains why certain operations are fast or slow, how 
+  CRDs extend the system cleanly, and why informers exist.
+
+
+
+Key Concepts to Internalize
+------------------------------
+  * API Groups & Versions: 
+      core (v1), apps/v1, networking.k8s.io/v1, apiextensions.k8s.io/v1, etc. 
+      Newer groups live under /apis/....
+
+  * Resources vs Kinds: 
+      pods is the resource name; Pod is the Kind. 
+      Plural vs singular matters in the API.
+
+  * REST API structure: 
+      /api/v1/namespaces/{ns}/pods, 
+      /apis/apps/v1/namespaces/{ns}/deployments, etc.
+
+  * Discovery: 
+      How kubectl and clients figure out what the 
+      server supports (/apis, /api/v1, OpenAPI schema).
+
+  * Watch semantics: 
+      Long-lived connections that stream changes (the 
+      foundation of informers and efficient controllers). 
+      Not polling.
+
+  * API Server responsibilities: 
+      Authentication, authorization (RBAC), admission 
+      (validating/mutating webhooks), validation, 
+      storage in etcd, and serving.
+
+
+Best Resources
+
+    * Official starting point: Kubernetes API Concepts
+
+    * Full API Reference (adjust version to your cluster): 
+      https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.31/
+
+    * Excellent deep but readable guide: The "API Machinery" sections in 
+      the Programming Kubernetes book (still one of the best).
+
+    * For later (when we hit CRDs): Extending the Kubernetes API
+

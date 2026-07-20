@@ -9,10 +9,10 @@ Kubernetes/General/Kubectl/Workload_management
 kubectl run nginx-test --image=nginx:alpine --restart=Never
 # If it doesn't work, you may need to create the Kind cluster:
 #    kind create cluster --name k8s-learning
-# Or maybe, just start it:
-#    kind start --name k8s-learning
 # Or even delete it and then recreate:
 #    kind delete cluster --name k8s-learning
+# Just check if it's running:
+#    kind get clusters
 
 
 # See it
