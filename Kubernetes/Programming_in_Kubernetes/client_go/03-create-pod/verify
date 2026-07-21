@@ -1,0 +1,4 @@
+#! /bin/bash
+
+kubectl get pod demo-pod -n k8s-learning
+kubectl get pod demo-pod -n k8s-learning -o wide
