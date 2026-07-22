@@ -1,0 +1,27 @@
+
+CRDs (Custom Resource Definitions) are the way that K8S lets 
+you define your own objects that behave like built-in K8S 
+objects.
+
+Skupper examples are: Site, Link, Listener, Connector.
+
+When Kubernetes 1.0 was introduced in July 2015, CRDs were 
+not part of it. They were not introduced until 1.7 in June
+2017, and went GA in 1.16 in Sep 2019.
+
+It is possible to make a basic custom resource by supplying 
+only YAML. That basically gives you some structured storage
+that gets treated by K8S just like any of its own resources.
+But that will *not* give you any behavior on the part of the
+resource. Obviously.
+
+An Operator is a collection of one or more CRDs plus the Controller code
+that reconciles them. The CRDs are YAML that gets applied to the K8S
+API Server, which creates Custom Resources from them. Our Controller
+talks to K8S to put watches on the CRs. When anything changes in the
+CRs the Controller gets notifications from K8S. It then determines if
+the current state matches the desired state of the resources. If not,
+it issues to K8S to correct the divergence. It continues performing this
+'reconciliation' loop as long as the Pod runs.
+
+
