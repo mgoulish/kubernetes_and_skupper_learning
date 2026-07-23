@@ -1,0 +1,47 @@
+
+Setting Up a Skupper Network
+===========================================================
+
+We have two site directories: west and east.
+
+Both directories contain a site.yaml file.
+
+One directory contains a listener.yaml, and the other contains
+a connector.yaml.
+
+And both sites have a Helm Chart.
+
+The User launches Helm twice, once for each namespace, with
+commands something like this:
+
+  helm install skupper oci://quay.io/skupper/helm/skupper \
+    --namespace west \
+    --create-namespace \
+    --set scope=namespace
+
+Helm then starts issuing commands that the User would have to
+do manually, like "kubectl apply YAML_FILE"
+
+When the API Server gets the YAML files applied, it creates a
+Deployment in the desired Namespace.
+
+
+The Kubelet on that Node pulls the image for the Container
+(or Containers) of the Pod that is starting.
+
+When those images start running, the container’s ENTRYPOINT 
+with CMD runs the Go binary (the controller main function)
+
+When the Controller starts running, it:
+
+  * Loads the kubeconfig and creates clientsets
+
+  * Sets up informers for the Skupper CRDs 
+    (Site, Link, Listener, Connector, etc.). 
+
+  * Starts the reconciliation loops
+
+And now we're rolling!
+
+
+
