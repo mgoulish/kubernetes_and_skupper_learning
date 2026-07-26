@@ -1,0 +1,41 @@
+Main Resources
+===============================================
+
+Site
+  A place on the network where applications are running
+  One per Namespace
+
+Link
+  A channel for communication between two Sites
+
+Listener
+  Binds a local connection endpoint (host + port) to 
+  Connectors in remote sites. This is what exposes a
+  Service to the network.
+
+Connector
+  Binds a local workload to Listeners in remote sites. 
+  This is what consumes a remote Service.
+
+
+
+Site Linking Resources
+===============================================
+
+AccessGrant
+  Permission to create links to the local site. 
+  It issues short-lived tokens that remote sites can redeem.
+
+AccessToken
+  A short-lived credential generated from an AccessGrant. 
+  A remote site uses it to create a Link.
+
+RouterAccess
+  How the Skupper router is exposed externally for incoming links.
+
+
+
+
+
+
+

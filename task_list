@@ -21,30 +21,31 @@ Kubernetes
 
 
 
-  Programming in Kubernetes       DONE
+  Programming in Kubernetes              DONE
   {
-      Understand the API server 
+      Understand the API server          done
 
-      Client-Go 
+      Client-Go                          done
       {
-        K8s objects in Go 
+        K8s objects in Go                done
 
-        Client sets 
+        Client sets                      done
 
-        Informers and Caching 
+        Informers and Caching            done
 
-        Dynamic and type clients 
+        Dynamic and type clients         done
       }
   }
 
 
-  Understand the Model 
-  {
-    CRDs 
-    {
-      Kubernetes Custom Resource Definitions 
 
-      Review each resource and attributes 
+  Understand the Model       done
+  {
+    CRDs       done
+    {
+      Kubernetes Custom Resource Definitions     done
+
+      Review each resource and attributes        done
       {
         Understand their purpose and how they are used 
       }
