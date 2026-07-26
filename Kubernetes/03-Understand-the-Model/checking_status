@@ -1,0 +1,64 @@
+
+Every Skupper CRD has a Spec and a Status section.
+
+The spec says what you want, while the Status shows 
+what you currently have.
+
+Users write to the Spec.
+Controllers update the Status.
+
+You can check on the status of a resource with 
+commands like:
+
+      kubectl get site      -o yaml
+      kubectl get listener  -o yaml
+      kubectl get connector -o yaml
+
+Or, to just see part of the status:
+
+      kubectl get site west -o jsonpath='{.status.conditions}'
+
+
+List all Skupper-related CRDs:
+
+      kubectl get crd | grep skupper
+
+Describe a CRD:
+
+      kubectl describe crd sites.skupper.io
+
+
+
+Show the schema for the Spec section of the Listener CRD:
+{
+    kubectl get crd listeners.skupper.io -o yaml | yq '.spec.versions[0].schema.openAPIV3Schema.properties.spec'
+
+    See what fields a Listener supports without reading the full CRD or source code.
+
+    How it works:
+    {
+      1. kubectl get crd listeners.skupper.io
+         get CRD for listeners
+
+      2. -o yaml
+         put it out as yaml
+
+      3. | yq '...' 
+         pipe to yq, a YAML processor
+
+      4. .spec.versions[0]
+         select the first version of the CRD
+
+      5. .schema.openAPIV3Schema
+         Goes into the OpenAPI validation schema
+
+      6. .properties.spec
+         Extracts only the schema definition for the spec field
+
+    }
+}
+
+
+
+
+
