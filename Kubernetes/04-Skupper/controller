@@ -1,0 +1,25 @@
+
+The Skupper Controller
+=========================================================
+
+
+Theory of Operation
+------------------------------
+
+The Skupper Controller continuously monitors all the Resources 
+(Site, Link, Listener, Connector, AccessGrant, etc.) and keep 
+them in sync with the desired state expressed in their Specs.
+
+So it watches the resources, detects changes, makes calls to
+the K8S API Server if changes are needed, and updates the Status.
+
+If the Skupper Site is on K8S, then the Controller runs as a 
+K8S Deployment. If the Site is instead running on something other
+than K8S, like Podman or bare Linux (bare metal), then it runs
+as a standalone process.
+
+If the Site is non-K8S then the Controller manages local files 
+and local containers, but linking between sites still works the
+same way.
+
+

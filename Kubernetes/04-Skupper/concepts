@@ -1,0 +1,32 @@
+
+Sites
+---------------------------------
+Site	        A site is a place on the network where application workloads 
+                are running
+Workload	A workload is a set of processes running on a platform
+Platform	A platform is a system for running application workloads
+
+
+Networks
+---------------------------------
+Network	        A network is a set of sites joined by links
+Link	        A link is a channel for communication between sites
+Access token	An access token is a short-lived credential used to create a link
+
+
+Services
+---------------------------------
+Listener	        A listener binds a local connection endpoint to connectors 
+                        in remote sites
+Multi-key-listener	A multi-key listener binds a single local connection endpoint 
+                        to multiple connectors in remote sites using a strategy that 
+                        matches multiple routing keys
+Connector	        A connector binds a local workload to listeners in remote sites
+Routing key	        A routing key is a string identifier for matching listeners and 
+                        connectors
+
+
+Applications
+---------------------------------
+Application	An application is a set of components that work together
+Component	A component is a logical part of an application

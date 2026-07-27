@@ -1,0 +1,9 @@
+
+What is Skupper?
+---------------------------
+Skupper creates a virtual application network that connects 
+services across Kubernetes clusters (and also Docker, Podman, 
+and bare Linux) without requiring VPNs, public IPs, or 
+complex network configuration.
+
+
