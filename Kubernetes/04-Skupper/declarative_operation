@@ -1,0 +1,128 @@
+
+Declarative Operation
+==================================================
+
+
+What is Declarative Operation?
+------------------------------------------
+Declarative operation is where you use things like YAML
+files to describe the system you want, and then K8S attempts
+to make it so.
+
+As opposed to *imperative* operation, in which you use
+kubectl commands to talk directly to the K8S API Server to
+build up the system you want.
+
+Everybody always uses Declarative operation in production
+environments.
+
+
+
+Scope of the Controller
+------------------------------------------
+
+The Skupper Controller can control CRs in either a
+single Namespace, or across multiple Namespaces.
+
+That choice is conrolled by the WATCH_NAMESPACES
+env var, which is part of the Controller deployment.
+
+The typical behavior is to have it watch all Namespaces.
+
+
+
+Helm Chart
+------------------------------------------
+
+The Helm chart installs the platform (the Controller, CRDs, RBAC, etc.).
+It does *not* create the actual Skupper network configuration.
+
+Use of the Helm Chart keeps the installation of the platform separate 
+from the configuration of individual sites and services
+
+You use the Helm Chart something like this:
+
+
+helm install skupper oci://quay.io/skupper/helm/skupper \
+  --namespace west \
+  --create-namespace \
+  --set scope=namespace
+
+
+After the Helm install finishes, you still need to apply your own resources:
+  * Site
+  * Listener
+  * Connector
+  * Link
+  * AccessGrant or AccessToken
+
+
+
+
+
+Mega-YAMLs
+------------------------------------------
+
+Big YAML files that do an entire Skupper install in one
+big gulp. These are an alternative to usingthe Helm Chart.
+
+This way is convenient for quick installs but less flexible 
+than Helm for customization.
+
+Installed something like this:
+  kubectl apply -f https://skupper.io/v2/install.yaml
+
+
+
+
+
+
+The Operator
+------------------------------------------
+Once the Operator is running, it can create and manage Skupper sites in
+the cluster. In practice, it acts as a higher-level way to deploy the same
+controller that you would install with Helm or the static YAML manifests.
+
+The Operator installs and manages the Controller using the
+Operator Lifecycle Manager (OLM).
+
+It creates and manages Skupper sites in the cluster.
+
+  Why do people use Operators?
+  {
+    Operators are designed for long-lived, managed services. The platform
+    can restart, upgrade, and monitor them consistently.
+
+    Operators often come with well-defined permission models that fit
+    enterprise governance.
+
+    If the cluster already runs many Operators (Service Mesh, monitoring,
+    databases, etc.), using the Skupper Operator keeps the operational
+    model consistent.
+
+    (I.e., people use it because they have been using it.)
+  }
+
+
+   Why Helm is usually better:
+   {
+     * maximum flexibility and simple values overrides.
+     * you are on plain Kubernetes (not OpenShift).
+     * a lightweight, scriptable installation.
+   }
+
+
+
+
+Helm vs Operator
+------------------------------------------
+
+  * Helm / YAML → Most common and flexible for general Kubernetes.
+
+  * Operator → Preferred when you are in OpenShift and you want 
+    platform-managed lifecycle and updates.
+
+
+
+
+

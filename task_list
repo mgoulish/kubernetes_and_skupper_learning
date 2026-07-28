@@ -56,36 +56,36 @@ Kubernetes
 
 Skupper 
 {
-  concepts
+  concepts      done
   {
     https://skupper.io/docs/refdog/concepts/index.html 
   }
 
-  resources
+  resources      done
   {
     /config/crd/bases 
   }
 
-  the Controller 
+  the Controller      done
   {
     Theory of operation 
     {
-      K8S 
+      K8S                
 
       System sites 
     }
   }
 
-  Declarative operation 
+  Declarative operation                   done
   {
-    Deploying the controller and CRDs 
+    Deploying the controller and CRDs     done
     {
-      Cluster, namespace scope 
+      Cluster, namespace scope            done
     }
 
-    Mega yamls 
+    Mega yamls                            done
 
-    Helm chart 
+    Helm chart                            done
 
     Operator 
   }
