@@ -87,24 +87,24 @@ Skupper
 
     Helm chart                            done
 
-    Operator 
+    Operator                              done
   }
 
-  The CLI 
+  The CLI                                 done
   {
     How it layers on top of CRDs 
 
     The “generate” option 
   }
 
-  The Adaptor 
+  The Adaptor      done
   {
     CR to router configuration (links, listeners, connectors, etc.) 
 
     Understanding status derivation (see vanflow below) 
   }
 
-  Vanflow 
+  Vanflow          done
 
   The Collector 
   {

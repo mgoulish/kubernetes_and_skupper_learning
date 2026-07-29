@@ -9,3 +9,9 @@ ontroller decides what should exist, then the Adaptor expresses
 that in language that the Router can consume.
 
 It also sets up the links to other Routers.
+
+But information also goes the other way.
+It is only the Router that knows the actual state of things like 
+links. So the Adaptor gets information from it -- maybe using
+info from Vanflow -- and then informs the Controller, which then
+updates the current status of the relevant Custom Resources.

@@ -1,0 +1,40 @@
+
+
+* Event Sources emit Vanflow Events: sites, routers, links, 
+  listeners, connectors, and application flows.
+
+* Event Sources can be Routers, Controllers, and other components.
+
+* The events travel as AMQP Messages.
+
+* A Collector receives the Vanflow messages from the whole Network.
+
+
+Types of Info that the VanFlow carries:
+
+   * Site and Router presence
+   * Link state
+   * Listener and Connector state
+   * Actual traffic flows (who is talking to whom, latency, bytes transferred, etc.)
+   * Process / workload information
+
+
+     Router (and other components)
+
+        ↓  emit Vanflow events
+
+     Vanflow protocol (AMQP)
+
+        ↓
+
+     Collector / Network Observer
+
+        ↓
+
+     Console + Status updates on CRs
+
+
+Vanflow is the data plane for observability and status derivation in Skupper.
+
+
+
