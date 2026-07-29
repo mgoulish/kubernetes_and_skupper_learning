@@ -1,0 +1,11 @@
+
+The Router does not directly understand or interact with
+Custom Resources. Something has to translate that information
+into configuraton and commands that it does understand.
+
+That's the Adaptor.
+
+ontroller decides what should exist, then the Adaptor expresses
+that in language that the Router can consume.
+
+It also sets up the links to other Routers.
