@@ -125,4 +125,37 @@ Helm vs Operator
 
 
 
+If you are on OpenShift
+------------------------------------------
+
+OpenShift gives you a lot of automated help if you use an Operator.
+OpenShift is kind of architected around Operators.
+
+  * OperatorHub  a graphical place where you can find Operators
+                 and install and manage them.
+
+  * OLM          (Operator Lifecycle Manager) Automatically handles 
+                 installation, upgrades, dependency resolution, and 
+                 cleanup of Operators
+
+  * Subscriptions  You create a Subscription resource and OLM keeps 
+                   the Operator up to date according to the channel 
+                   you choose (e.g. stable).
+
+  * Console        OpenShift web console shows Operator status, 
+                   available APIs, and provides forms for guided 
+                   creation of the custom resources.
+
+  * RBAC &          OpenShift’s stronger multi-tenant model works well 
+    multi-tenancy   with Operators. Cluster admins can control who can 
+                    install which Operators.
+
+  * It's Popular!   Most other important components on OpenShift 
+                    (Service Mesh, pipelines, monitoring, serverless, 
+                    etc.) are also delivered as Operators. Using the 
+                    Skupper Operator keeps your operational practices 
+                    consistent.
+
+                
+
 
