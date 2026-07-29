@@ -1,0 +1,39 @@
+Almost everything the CLI does is ultimately just creating, updating, or deleting Skupper CRDs.
+When you run a CLI command, it:
+
+Constructs the appropriate Custom Resource (Site, Listener, Connector, AccessGrant, etc.).
+Applies it to the cluster (or local system).
+Often waits for the resource to become ready and shows you status.
+
+The CLI bascially creates, updates, and deletes CRDs.
+CLI commands:
+     1. construct a Custom Resource  (a site, listener, etc)
+     2. Applies it to the cluster (or local system).
+     3. waits for the resource to become ready and shows you status.
+
+
+Look at some examples:
+
+  CLI Command,                                What it does 
+  -----------------------------------------------------------------------------------
+  skupper site create west,                   Creates a Site resource named west
+  skupper listener create backend 8080,       Creates a Listener resource
+  skupper connector create backend 8080,      Creates a Connector resource
+  skupper token issue / skupper link create,  Works with AccessGrant + AccessToken 
+                                              (or creates a Link)
+  skupper site status,                        Reads the status of the Site 
+                                              (and related resources)
+
+
+The CLI makes the common cases easy, while still allowing you to drop down 
+to raw YAML when you need more control.
+
+
+CLI commands allow you to generate YAML. instead of carrying out the command.
+Like this:
+
+     skupper listener create backend 8080 --generate
+
+This way you can look at it, change it, then kubectl appy it.
+
+
