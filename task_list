@@ -106,12 +106,12 @@ Skupper
 
   Vanflow          done
 
-  The Collector 
+  The Collector         done
   {
     Network observer 
 
     Mini-collector (for status) 
   }
 
-  the Console 
+  the Console        done
 }

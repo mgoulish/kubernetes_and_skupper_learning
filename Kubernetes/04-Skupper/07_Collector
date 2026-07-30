@@ -1,0 +1,12 @@
+
+There are two Collectors: The Network Observer, and the Mini-Collector
+
+The Network Observer receives things from all over the network, and
+builds up the overall picture of the network.
+
+The Mini-Collector just gets info about the current state of links, 
+listeners, and connectors so the Controller can update the .status 
+fields of the CRs
+
+The Network Observer gives its info to the Console -- visualization --
+and the Controller so it can update the CRs.

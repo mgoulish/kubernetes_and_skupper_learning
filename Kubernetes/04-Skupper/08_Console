@@ -1,0 +1,37 @@
+
+
+The Skupper Console is a web-based graphical interface for 
+observing a Skupper network.
+
+It gives you a real-time view of the Virtual Application Network 
+so you don't have to inspect individual Custom Resources or 
+Router logs.
+
+
+
+It shows
+---------------------------------------------------------------
+
+Topology	How Sites are linked, and the overall shape 
+                of the network
+
+Sites	        Status and details of each site
+
+Links	        Connection state between sites
+
+Services	Listeners and Connectors, and whether they 
+                have matching counterparts
+
+Flows	        Application traffic moving across the network 
+                (if flow collection is enabled.)
+
+Workloads	Which pods or processes are running
+
+
+
+
+
+exposed as a Kubernetes Service
+
+
+
